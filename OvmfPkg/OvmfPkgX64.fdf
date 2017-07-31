@@ -227,9 +227,9 @@ INF  OvmfPkg/Virtio10Dxe/Virtio10.inf
 INF  OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
 INF  OvmfPkg/VirtioScsiDxe/VirtioScsi.inf
 INF  OvmfPkg/VirtioRngDxe/VirtioRng.inf
-INF  OvmfPkg/XenIoPciDxe/XenIoPciDxe.inf
-INF  OvmfPkg/XenBusDxe/XenBusDxe.inf
-INF  OvmfPkg/XenPvBlkDxe/XenPvBlkDxe.inf
+#####INF  OvmfPkg/XenIoPciDxe/XenIoPciDxe.inf
+#####INF  OvmfPkg/XenBusDxe/XenBusDxe.inf
+#####INF  OvmfPkg/XenPvBlkDxe/XenPvBlkDxe.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   INF  SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf

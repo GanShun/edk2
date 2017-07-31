@@ -366,6 +366,7 @@ DxeMain (
     gDxeCoreImageHandle
     );
 
+  DEBUG ((DEBUG_INFO, "FUCCCCCCCCCCCCCCCCCCCCCCCCCCK\n"));
   DEBUG ((DEBUG_INFO | DEBUG_LOAD, "HOBLIST address in DXE = 0x%p\n", HobStart));
 
   DEBUG_CODE_BEGIN ();
