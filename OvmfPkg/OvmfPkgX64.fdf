@@ -291,6 +291,7 @@ INF  RuleOverride = BINARY EdkShellBinPkg/FullShell/FullShell.inf
 !endif
 
 ##### INF MdeModulePkg/Logo/LogoDxe.inf
+INF Linux/Linux.inf
 
 #
 # Network modules

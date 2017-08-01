@@ -652,6 +652,7 @@
 !endif
   }
   MdeModulePkg/Logo/LogoDxe.inf
+  Linux/Linux.inf
   MdeModulePkg/Application/UiApp/UiApp.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
