@@ -320,7 +320,7 @@ INF  RuleOverride = BINARY EdkShellBinPkg/FullShell/FullShell.inf
 !else
   INF  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
   INF  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
-  INF  MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
+##### INF  MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
 !endif
 !if $(HTTP_BOOT_ENABLE) == TRUE
   INF  NetworkPkg/DnsDxe/DnsDxe.inf
