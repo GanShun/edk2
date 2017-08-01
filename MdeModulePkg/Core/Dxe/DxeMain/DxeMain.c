@@ -519,6 +519,7 @@ DxeMain (
   //
   // Transfer control to the BDS Architectural Protocol
   //
+  DEBUG ((DEBUG_INFO, "FUCCCCCCCCCCCCCCCCCCCCCCCCCCK\n"));
   gBds->Entry (gBds);
 
   //

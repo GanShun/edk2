@@ -1032,6 +1032,7 @@ VgaClassClearScreen (
   UINTN         MaxRow;
   UINTN         MaxColumn;
   UINT32        VideoChar;
+return;
 
   VgaClassDev = VGA_CLASS_DEV_FROM_THIS (This);
 
