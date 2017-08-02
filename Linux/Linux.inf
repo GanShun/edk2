@@ -21,7 +21,7 @@
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
 
-  ENTRY_POINT                    = phys_startup_64
+#####  ENTRY_POINT                    = phys_startup_64
 #
 #  This flag specifies whether HII resource section is generated into PE image.
 #
