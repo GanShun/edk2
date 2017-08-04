@@ -285,9 +285,9 @@ INF  MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResour
 INF  FatPkg/EnhancedFatDxe/Fat.inf
 
 !ifndef $(USE_OLD_SHELL)
-INF  ShellPkg/Application/Shell/Shell.inf
+#INF  ShellPkg/Application/Shell/Shell.inf
 !else
-INF  RuleOverride = BINARY EdkShellBinPkg/FullShell/FullShell.inf
+#INF  RuleOverride = BINARY EdkShellBinPkg/FullShell/FullShell.inf
 !endif
 
 ##### INF MdeModulePkg/Logo/LogoDxe.inf
