@@ -17,7 +17,7 @@
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = LinuxDxe
   MODULE_UNI_FILE                = LinuxDxe.uni
-  FILE_GUID                      = 7C04A583-9E3E-4f1c-AD65-E05268D0B4D1
+  FILE_GUID                      = 7C04A583-9E3E-4f1c-AD65-E05268D0B4DF
 # F74D20EE-37E7-48FC-97F7-9B1047749C69
   MODULE_TYPE                    = UEFI_APPLICATION
   VERSION_STRING                 = 1.0
@@ -40,17 +40,25 @@
 [Packages]
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Linux/Linux.dec
 
 [LibraryClasses]
   UefiApplicationEntryPoint
   UefiLib
   DebugLib
 
+[Guids]
+
+  gUefiLinuxFileGuid
+  gLinuxVariableGuid
+  
 [Protocols]
+
   gEfiHiiDatabaseProtocolGuid        ## CONSUMES
   gEfiHiiImageExProtocolGuid         ## CONSUMES
   gEfiHiiPackageListProtocolGuid     ## PRODUCES CONSUMES
 #   gEdkiiPlatformLinuxProtocolGuid     ## PRODUCES
+ gEfiLinuxProtocolGuid
 
 [Depex]
   TRUE
