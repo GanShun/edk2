@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -14,51 +14,65 @@ const (
 )
 
 var (
-	opcodes = map[string]byte {
- "TRUE": 6,
- "PUSH": 2,
- "AND": 3,
- "OR": 4,
- "END": 8,
+	opcodes = map[string]byte{
+		"TRUE": 6,
+		"PUSH": 2,
+		"AND":  3,
+		"OR":   4,
+		"END":  8,
 	}
+	// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
+	// 000000000011111111112222222222333333
+	// 012345678901234567890123456789012345
+	fields = [...]struct {
+			gs, s, e int} {
+			{0, 0, 8},
+			{4, 9, 13},
+			{6, 14, 18},
+			{8, 19, 23},
+			{10, 24, 36},
+			}
+
 )
 
-
-func tobin(r io.Write, []byte) {
-	var b [16]byte
-	if n, err := r.Read(b[:]); n != 16 || err != nil {
-		log.Fatalf("Reading GUID: got %d of 16 bytes: %v", n, err)
+func toGuid(w io.Writer, b []byte, s string) {
+	for i := range b {
 	}
-	return b[:]
 }
-
 func main() {
 	var b bytes.Buffer
-	var (
-		hdr [4]byte
-		len int
-	)
 
 	for {
-		var op, val string
-		if n, err := fmt.Fscanf(os.Stdin, &op); err != nil || n == 0 {
-			log.Fatalf("Scanln: Scanlf: no opcode: %v", err)
+		var op, g string
+		n, err := fmt.Scanln(&op, &g)
+		if err == io.EOF {
+			break
 		}
-
+		if n == 0 {
+			continue
+		}
+		//fmt.Printf("%v %v\n", op, g)
 		opcode, ok := opcodes[op]
-		if ! ok {
+		if !ok {
 			log.Fatalf("Opcode %v not known", opcode)
 		}
-		if opcode == "PUSH" {
-			if n, err := fmt.Fscanf(os.Stdin, &guid); err != nil || n == 0 {
-				log.Fatalf("Scanln: Scanlf: no guid: %v", err)
+		b.Write([]byte{opcode})
+		if op == "PUSH" {
+			// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
+			var d [glen]byte
+			for i := range fields {
+				if _, err := hex.Decode(d[fields[i].gs:], []byte(g[fields[i].s:fields[i].e])); err != nil {
+					log.Fatalf("err on %v: %v", g[:8], err)
+				}
 			}
+
+			b.Write(d[:])
 		}
-		// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
-		if _, err := hex.Decode(d[0], g[:8]); err != nil {
-			log.Fatalf("err on %v: %v", g[:8], err)
-		}
-		
-		fmt.Printf("write %v %v\n", op, guid)
 	}
+	l := b.Len() + 4
+	hdr := append([]byte{byte(l), byte(l>>8), byte(l>>16), 0x13}, b.Bytes()...)
+	if _, err := os.Stdout.Write(hdr); err != nil {
+		log.Fatalf("%v", err)
+	}
+	
 }
