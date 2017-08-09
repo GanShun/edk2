@@ -36,7 +36,12 @@ var (
 )
 
 func toGuid(w io.Writer, b []byte, s string) {
+	l := len(s)
 	for i := range b {
+		fmt.Fprintf(os.Stderr, 
+		if _, err := hex.Decode(b[l-i:], []byte(s[i:i+2])); err != nil {
+			log.Fatalf("err on %v: %v", s, err)
+		}
 	}
 }
 func main() {
@@ -60,10 +65,9 @@ func main() {
 		if op == "PUSH" {
 			// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
 			var d [glen]byte
-			for i := range fields {
-				if _, err := hex.Decode(d[fields[i].gs:], []byte(g[fields[i].s:fields[i].e])); err != nil {
-					log.Fatalf("err on %v: %v", g[:8], err)
-				}
+			for _, f := range fields {
+				fmt.Fprintf(os.Stderr, "%v %v %v\n", f.gs, f.s, f.e)
+				toGuid(&b, d[f.gs:], g[f.s:f.e])
 			}
 
 			b.Write(d[:])
