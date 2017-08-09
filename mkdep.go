@@ -2,11 +2,13 @@ package main
 
 import (
 	"bytes"
-	"encoding/hex"
+	"encoding/binary"
 	"fmt"
 	"io"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -22,36 +24,26 @@ var (
 		"OR":   4,
 		"END":  8,
 	}
-	// Intel's print format for GUIDs is stupid.
-	// It could have been IPV6, but it's not.
-	// They could have at least made
-	// these fields fit in 64-bit ints,
-	// they did not. Morons.
-	// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
-	// 000000000011111111112222222222333333
-	// 012345678901234567890123456789012345
-	fields = [...]struct {
-		s, e int
-	}{
-		{0, 8},
-		{9, 13},
-		{14, 18},
-		{19, 23},
-		{24, 36},
-	}
 )
 
-func toGuid(w io.Writer, s string) {
-	//fmt.Printf("s %v len(s) %d\n", s, len(s))
-	for l := len(s); l > 0; l = l - 2 {
-		var b [1]byte
-		//fmt.Printf("%v %d %d\n", s, l - 2, l + 0)
-		if _, err := hex.Decode(b[:], []byte(s[l-2:l+0])); err != nil {
-			log.Fatalf("err on %v: %v", s, err)
+func writeGUID(w io.Writer, guid string) {
+	s := strings.Split(guid, "-")
+	//fmt.Fprintf(os.Stderr, "%v %v: ", guid, s)
+	bits := []int{32, 16, 16, 16, 48}
+	for i := range s {
+		n, err := strconv.ParseUint(s[i], 16, bits[i])
+		//fmt.Fprintf(os.Stderr, "%08x-", n)
+		if err != nil {
+			log.Fatalf("%v: not a %d bit Uint: %v", s[i], bits[i], err)
 		}
-		w.Write(b[:])
+		for bn := 0; bn < bits[i]/8; bn = bn + 1 {
+			binary.Write(w, binary.LittleEndian, byte(n))
+			n = n >> 8
+		}
 	}
+	//fmt.Fprintf(os.Stderr, "\n")
 }
+
 func main() {
 	var b bytes.Buffer
 
@@ -74,11 +66,7 @@ func main() {
 			if len(g) < gTextLen {
 				log.Fatalf("'%v' is too short for a GUID, has to be %d chars\n", g, gTextLen)
 			}
-			// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
-			for _, f := range fields {
-				//fmt.Fprintf(os.Stderr, "%v %v\n", f.s, f.e)
-				toGuid(&b, g[f.s:f.e])
-			}
+			writeGUID(&b, g)
 		}
 	}
 	l := b.Len() + 4
