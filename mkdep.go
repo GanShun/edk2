@@ -24,6 +24,7 @@ var (
 		"OR":   4,
 		"END":  8,
 	}
+	stackdepth int
 )
 
 func writeGUID(w io.Writer, guid string) {
@@ -45,9 +46,12 @@ func writeGUID(w io.Writer, guid string) {
 }
 
 func main() {
-	var b bytes.Buffer
+	var (
+		b    bytes.Buffer
+		done bool
+	)
 
-	for {
+	for !done {
 		var op, g string
 		n, err := fmt.Scanln(&op, &g)
 		if err == io.EOF {
@@ -68,11 +72,27 @@ func main() {
 			}
 			writeGUID(&b, g)
 		}
+		switch op {
+		case "TRUE":
+			stackdepth++
+		case "PUSH":
+			stackdepth++
+		case "AND":
+			stackdepth--
+		case "OR":
+			stackdepth--
+		case "END":
+			done = true
+		}
+
 	}
 	l := b.Len() + 4
 	hdr := append([]byte{byte(l), byte(l >> 8), byte(l >> 16), 0x13}, b.Bytes()...)
 	if _, err := os.Stdout.Write(hdr); err != nil {
 		log.Fatalf("%v", err)
+	}
+	if stackdepth != 1 {
+		log.Fatalf("stackdepth is %d, should be 1", stackdepth)
 	}
 
 }
