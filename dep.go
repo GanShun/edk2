@@ -9,6 +9,7 @@ import (
 
 const (
 	glen = 16
+	gFmt = " %02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x"
 )
 
 var (
@@ -55,12 +56,19 @@ func main() {
 		}
 
 		l = l - len(op)
-		
+
 		fmt.Printf("%v", opcodes[op[0]])
 
 		if op[0] == 2 {
 			g := guid(os.Stdin)
-			fmt.Printf(" %v", g)
+			// This turned out to be the easiest way as opposed to messy for loops,
+			// due to the need to print backwards.
+			fmt.Printf(gFmt,
+				g[3], g[2], g[1], g[0],
+				g[5], g[4],
+				g[7], g[6],
+				g[9], g[8],
+				g[15], g[14], g[13], g[12], g[11], g[10])
 			l = l - glen
 		}
 
