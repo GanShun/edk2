@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"encoding/hex"
 	"io"
 	"log"
 	"os"
@@ -21,6 +22,7 @@ var (
  "END": 8,
 	}
 )
+
 
 func tobin(r io.Write, []byte) {
 	var b [16]byte
@@ -52,6 +54,11 @@ func main() {
 				log.Fatalf("Scanln: Scanlf: no guid: %v", err)
 			}
 		}
+		// 13A3F0F6-264A-3EF0-F2E0-DEC512342F34
+		if _, err := hex.Decode(d[0], g[:8]); err != nil {
+			log.Fatalf("err on %v: %v", g[:8], err)
+		}
+		
 		fmt.Printf("write %v %v\n", op, guid)
 	}
 }
