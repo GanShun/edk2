@@ -30,7 +30,19 @@ var (
 func writeGUID(w io.Writer, guid string) {
 	s := strings.Split(guid, "-")
 	//fmt.Fprintf(os.Stderr, "%v %v: ", guid, s)
-	bits := []int{32, 16, 16, 16, 48}
+	bits := []int{32, 16, 16, 16, 8, 8, 8, 8, 8, 8}
+
+	// Split the last 6 bytes manually because of the stupid guid format.
+	last6 := s[len(s)-1]
+	if len(last6) != 12 {
+		log.Fatalf("wrong number of bytes! expected 12 character suffix, got %v\n", last6)
+	}
+
+	s = s[:len(s)-1]
+	for i := 0; i < 6; i++ {
+		s = append(s, last6[2*i:2*i+2])
+	}
+
 	for i := range s {
 		n, err := strconv.ParseUint(s[i], 16, bits[i])
 		//fmt.Fprintf(os.Stderr, "%08x-", n)
