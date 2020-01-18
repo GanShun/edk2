@@ -1665,7 +1665,7 @@
   #   TRUE  - BDS supports Platform Recovery.<BR>
   #   FALSE - BDS does not support Platform Recovery.<BR>
   # @Prompt Support Platform Recovery.
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPlatformRecoverySupport|TRUE|BOOLEAN|0x00010078
+  gEfiMdeModulePkgTokenSpaceGuid.PcdPlatformRecoverySupport|FALSE|BOOLEAN|0x00010078
 
   ## Specify the foreground color for Subtile text in HII Form Browser. The default value is EFI_BLUE.
   #  Only following values defined in UEFI specification are valid:<BR><BR>
