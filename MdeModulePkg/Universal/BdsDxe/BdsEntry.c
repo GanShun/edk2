@@ -778,6 +778,8 @@ BdsEntry (
     BootNext = NULL;
   }
 
+  UINT16 F = 0;
+  BootNext = &F;
   //
   // Initialize the platform language variables
   //
@@ -966,6 +968,7 @@ BdsEntry (
   // Clear EFI_OS_INDICATIONS_BOOT_TO_FW_UI to acknowledge OS
   //
   if (BootFwUi || PlatformRecovery) {
+    DEBUG ((EFI_D_INFO, "[Bds] BootFwUi or PlatformRecovery \n"));
     OsIndication &= ~((UINT64) (EFI_OS_INDICATIONS_BOOT_TO_FW_UI | EFI_OS_INDICATIONS_START_PLATFORM_RECOVERY));
     Status = gRT->SetVariable (
                EFI_OS_INDICATIONS_VARIABLE_NAME,
@@ -1019,6 +1022,7 @@ BdsEntry (
     EfiBootManagerHotkeyBoot ();
 
     if (BootNext != NULL) {
+      DEBUG ((EFI_D_INFO, "[Bds] BOOTNEXT == 0x%x\n", *BootNext));
       //
       // Delete "BootNext" NV variable before transferring control to it to prevent loops.
       //
@@ -1037,6 +1041,7 @@ BdsEntry (
       //
       // Boot to "BootNext"
       //
+      DEBUG ((EFI_D_INFO, "[Bds] BOOTing BOOTNEXT\n"));
       UnicodeSPrint (BootNextVariableName, sizeof (BootNextVariableName), L"Boot%04x", *BootNext);
       Status = EfiBootManagerVariableToLoadOption (BootNextVariableName, &LoadOption);
       if (!EFI_ERROR (Status)) {
@@ -1049,6 +1054,7 @@ BdsEntry (
           // Boot to Boot Manager Menu upon EFI_SUCCESS
           // Exception: Do not boot again when the BootNext points to Boot Manager Menu.
           //
+          DEBUG ((EFI_D_INFO, "[Bds] TRYING TO boot the bootmanager menu\n"));
           EfiBootManagerBoot (&BootManagerMenu);
         }
       }
@@ -1058,6 +1064,7 @@ BdsEntry (
       //
       // Retry to boot if any of the boot succeeds
       //
+      DEBUG ((EFI_D_INFO, "[Bds] Getting Load options\n"));
       LoadOptions = EfiBootManagerGetLoadOptions (&LoadOptionCount, LoadOptionTypeBoot);
       BootSuccess = BootBootOptions (LoadOptions, LoadOptionCount, (BootManagerMenuStatus != EFI_NOT_FOUND) ? &BootManagerMenu : NULL);
       EfiBootManagerFreeLoadOptions (LoadOptions, LoadOptionCount);
