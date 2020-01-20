@@ -262,6 +262,7 @@ PlatformBdsDiagnostics (
 {
   EFI_STATUS  Status;
 
+  return;
   //
   // Here we can decide if we need to show
   // the diagnostics screen
